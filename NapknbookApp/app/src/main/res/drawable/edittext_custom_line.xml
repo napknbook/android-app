@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="line">
+            <solid android:color="#000000"/> <!-- Color when focused -->
+            <padding android:bottom="1dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="line">
+            <solid android:color="#000000"/> <!-- Default color -->
+            <padding android:bottom="1dp" />
+        </shape>
+    </item>
+</selector>

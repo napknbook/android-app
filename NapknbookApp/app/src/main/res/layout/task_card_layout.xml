@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/TaskCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:background="@android:color/transparent">
+
+
+            <FrameLayout
+                android:id="@+id/completedButtonContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <View
+                    android:id="@+id/pulseView0"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_pulse_green"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/raysView0"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:alpha="0.3"
+                    android:src="@drawable/ic_rays_green"
+                    android:visibility="invisible"
+                    app:tint="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/completedTextView"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_button"
+                    android:gravity="center"
+                    android:text="✓"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/checkBoxButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:visibility="gone"
+                android:background="@color/white"
+                android:text="✓"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/taskTextView"
+        style="@style/CustomFontTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="275dp"
+        android:text="TaskTaskTaskTaskTaskTaskTaskTaskTaskTaTaskTaskTaskTaskTaskTaTaskTaskTaskTaskTaskTaTaskTaskTaskTaskTaskTaskTask"
+        android:textColor="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@+id/completedButtonContainer"
+        app:layout_constraintStart_toEndOf="@+id/completedButtonContainer"
+        app:layout_constraintTop_toTopOf="@+id/completedButtonContainer" />
+
+            <TextView
+                android:id="@+id/contentTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Content"
+
+                android:maxWidth="275dp"
+                android:textColor="@color/blue"
+                style="@style/CustomFontTextView"
+                app:layout_constraintStart_toStartOf="@+id/taskTextView"
+                app:layout_constraintTop_toBottomOf="@+id/taskTextView" />
+
+            <TextView
+                android:id="@+id/dueDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/CustomFontTextView"
+                android:layout_marginEnd="8dp"
+                android:text="Due Date"
+                android:maxWidth="275dp"
+                android:textColor="@color/blue"
+                app:layout_constraintStart_toStartOf="@+id/taskTextView"
+                app:layout_constraintTop_toBottomOf="@+id/contentTextView" />
+
+
+    <FrameLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/highPriorityPulseView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_pulse_red"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/highPriorityRaysView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:alpha="0.3"
+            android:src="@drawable/ic_rays_red"
+            android:visibility="invisible"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/highPriorityTextView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="❗"
+            android:backgroundTint="@color/high_priority_red"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+    </FrameLayout>
+
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dueDateTextView" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,49 @@
+package com.accelerate.napknbook.models;
+
+public class GoogleRegisterRequest {
+    private String username;
+    private String email;
+    private String password;
+    private String token ;
+
+    public GoogleRegisterRequest(String username, String email, String password, String token) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.token = token ;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String gettoken() {
+        return token;
+    }
+
+    public void settoken(String token) {
+        this.token = token;
+    }
+
+    // Getters and Setters
+}

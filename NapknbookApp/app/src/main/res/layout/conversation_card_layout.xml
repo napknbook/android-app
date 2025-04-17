@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConversationCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/convoCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:cardBackgroundColor="@color/black"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/skillImageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:src="@drawable/logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/skillTextView"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="nap/Cooking"
+                android:textColor="@color/grey"
+                app:layout_constraintBottom_toBottomOf="@+id/skillImageView"
+                app:layout_constraintStart_toEndOf="@+id/skillImageView"
+                app:layout_constraintTop_toTopOf="@+id/skillImageView" />
+
+            <ImageView
+                android:id="@+id/userImageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/logo"
+                app:layout_constraintStart_toEndOf="@+id/skillTextView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/taskTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="ent/MotoMoto92"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/userImageView"
+                app:layout_constraintStart_toEndOf="@+id/userImageView"
+                app:layout_constraintTop_toTopOf="@+id/userImageView" />
+
+            <TextView
+                android:id="@+id/conversationDescTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:paddingRight="8dp"
+                android:textSize="14sp"
+                android:textColor="@color/grey"
+                android:text="Description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/conversationTitleTextView" />
+
+            <TextView
+                android:id="@+id/conversationTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:text="Title"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userImageView" />
+
+            <TextView
+                android:id="@+id/reactionsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Reactions"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+
+                android:background="@drawable/rounded_border"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/conversationDescTextView" />
+
+            <TextView
+                android:id="@+id/ratingsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Ratings"
+                android:textSize="12dp"
+
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_border"
+                app:layout_constraintStart_toEndOf="@+id/reactionsTextView"
+                app:layout_constraintTop_toBottomOf="@+id/conversationDescTextView" />
+
+
+            <TextView
+                android:id="@+id/commentsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Comments"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:background="@drawable/rounded_border"
+                app:layout_constraintStart_toEndOf="@+id/ratingsTextView"
+                app:layout_constraintTop_toBottomOf="@+id/conversationDescTextView" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reactionsTextView" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

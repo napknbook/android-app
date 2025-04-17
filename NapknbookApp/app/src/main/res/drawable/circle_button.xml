@@ -1,0 +1,11 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- Transparent fill -->
+    <solid android:color="@android:color/transparent" />
+
+    <!-- Black border -->
+    <stroke
+        android:width="2dp"
+        android:color="#FF000000" /> <!-- Black color -->
+</shape>

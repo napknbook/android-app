@@ -1,0 +1,5 @@
+<!-- res/drawable/circle_pulse.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#0044CC"/> <!-- Same color but with transparency -->
+</shape>
