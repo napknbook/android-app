@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Filter;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ import com.accelerate.napknbook.utils.SharedPreferencesHelper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -61,15 +63,25 @@ public class MainActivity extends AppCompatActivity {
     View goldButton ;
     Button exploreButton ;
     Button gearButton ;
+    TextView generateCharacterTextView ;
+    TextView earlyAdopterBadgeLevelTextView ;
+    TextView verifiedBadgeLevelTextView ;
     Button skillsButton ;
     Button settingsButton ;
     Button connectButton ;
     Button inventoryButton ;
     Button tasksButton ;
+    TextInputLayout textInputLayout ;
+    TextView closeDayBreakerMenuButton ;
+    Button heatButton ;
+    ImageView heatingElementImageView ;
+    ImageView cameraImageView ;
     Button confirmCharacterGenerationButton ;
     Button cancelCharacterGenerationButton ;
     ConstraintLayout confirmCharacterGenerationConstraintLayout;
     ConstraintLayout loadingSpinnerConstraintLayout ;
+    ConstraintLayout verifiedBadgeConstraintLayout ;
+    ConstraintLayout earlyAdopterBadgeConstraintLayout ;
     User user;
     VideoView videoView ;
     TextView usernameTextView ;
@@ -178,10 +190,41 @@ public class MainActivity extends AppCompatActivity {
         loadingSpinnerConstraintLayout.setVisibility(View.GONE);
 
         walletBalanceTextView = findViewById(R.id.walletBalanceTextView);
+        walletBalanceTextView.setText(user.getBalance().toString());
         //updateBalance();
 
+        earlyAdopterBadgeLevelTextView = findViewById(R.id.earlyAdopterBadgeLevelTextView);
+        earlyAdopterBadgeLevelTextView.setText(user.getEarly_adopter_badge_level());
 
-        TextView generateCharacterTextView = findViewById(R.id.generateCharacterTextView);
+        verifiedBadgeLevelTextView = findViewById(R.id.verifiedBadgeLevelTextView);
+        verifiedBadgeLevelTextView.setText(user.getVerified_badge_level());
+
+        heatingElementImageView = findViewById(R.id.heatingElementImageView);
+        heatingElementImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(), "DayBreaker Not Found", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        cameraImageView = findViewById(R.id.cameraImageView);
+        cameraImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "DayBreaker Not Found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+        earlyAdopterBadgeConstraintLayout = findViewById(R.id.earlyAdopterBadgeConstraintLayout);
+        verifiedBadgeConstraintLayout = findViewById(R.id.verifiedBadgeConstraintLayout);
+        textInputLayout = findViewById(R.id.textInputLayout);
+
+        generateCharacterTextView = findViewById(R.id.generateCharacterTextView);
         generateCharacterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
     void updateBalance() {
 
         NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
-        Call<ResponseBody> call = service.getBalance("Basic " + authToken[0]);
+        Call<ResponseBody> call = service.getBalance("Bearer " + authToken[0]);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -245,10 +288,6 @@ public class MainActivity extends AppCompatActivity {
     }
     void startVideoView() {
 
-
-
-        //String characterClipFilename = characters.get(sharedPreferencesHelper.getMainCharacterIndex()).getCharacterType() + "_workshop" + "_" + aspectRatioString + ".mp4" ;
-
         String characterClipFilename = "guy0_workshop" + "_" + aspectRatioString + ".mp4" ;
 
         ResourceMapSingleton resourceMapSingleton = ResourceMapSingleton.getInstance();
@@ -259,6 +298,61 @@ public class MainActivity extends AppCompatActivity {
         String path = "android.resource://" + getPackageName() + "/" + resourceId;
         //String path = "android.resource://" + getPackageName() + "/" + R.raw.zarrari;
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            videoView.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE);
+        }
+        videoView.setVideoURI(Uri.parse(path));
+
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.start(); // Restart the video when it ends
+            }
+        });
+
+
+        videoView.start();
+
+    }
+
+    void playConnectAnimation() {
+
+        String characterClipFilename = "guy0_workshop" + "_connect_" + aspectRatioString + ".mp4" ;
+
+        ResourceMapSingleton resourceMapSingleton = ResourceMapSingleton.getInstance();
+        HashMap<String, Integer> resourceMap = resourceMapSingleton.getResourceMap();
+        int resourceId = resourceMap.get(characterClipFilename);
+
+        videoView = findViewById(R.id.videoView);
+        String path = "android.resource://" + getPackageName() + "/" + resourceId;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            videoView.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE);
+        }
+        videoView.setVideoURI(Uri.parse(path));
+
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                showDayBreakerUI();
+            }
+        });
+
+        videoView.start();
+
+    }
+
+    void playConnectReversedAnimation() {
+
+
+        String characterClipFilename = "guy0_workshop" + "_connect_reversed_" + aspectRatioString + ".mp4" ;
+
+        ResourceMapSingleton resourceMapSingleton = ResourceMapSingleton.getInstance();
+        HashMap<String, Integer> resourceMap = resourceMapSingleton.getResourceMap();
+        int resourceId = resourceMap.get(characterClipFilename);
+
+        videoView = findViewById(R.id.videoView);
+        String path = "android.resource://" + getPackageName() + "/" + resourceId;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             videoView.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE);
@@ -270,7 +364,8 @@ public class MainActivity extends AppCompatActivity {
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                videoView.start(); // Restart the video when it ends
+                showMainUI();
+                startVideoView();
             }
         });
 
@@ -396,6 +491,7 @@ public class MainActivity extends AppCompatActivity {
         settingsButton = findViewById(R.id.settingsButton);
         skillsButton = findViewById(R.id.skillsButton);
         connectButton = findViewById(R.id.connectButton);
+        closeDayBreakerMenuButton = findViewById(R.id.closeDayBreakerMenuTextView);
         tasksButton = findViewById(R.id.tasksButton);
         inventoryButton = findViewById(R.id.inventoryButton);
         confirmCharacterGenerationButton = findViewById(R.id.confirmCharacterGenerationButton);
@@ -468,11 +564,27 @@ public class MainActivity extends AppCompatActivity {
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://napknbook.com/"));
-                startActivity(browserIntent);
-                //Intent intent = new Intent(MainActivity.this, ConnectActivity.class);
-                //Intent intent = new Intent(MainActivity.this, ConnectActivity.class);
-                //startActivity(intent);
+
+                // Change visibility of main ui
+
+                hideMainUI();
+
+                playConnectAnimation();
+
+                // Change visibility of Day Breaker ui
+
+
+            }
+        });
+
+        closeDayBreakerMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                hideDayBreakerUI();
+                playConnectReversedAnimation();
+
+
             }
         });
         cancelCharacterGenerationButton.setOnClickListener(new View.OnClickListener() {
@@ -489,7 +601,7 @@ public class MainActivity extends AppCompatActivity {
                 confirmCharacterGenerationConstraintLayout.setVisibility(View.GONE);
 
                 NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
-                Call<Character> call = service.generateCharacter("Basic " + authToken[0], csrfToken[0]);
+                Call<Character> call = service.generateCharacter("Bearer " + authToken[0], csrfToken[0]);
 
                 call.enqueue(new Callback<Character>() {
                     @Override
@@ -505,6 +617,8 @@ public class MainActivity extends AppCompatActivity {
                                 user.setCharacters(new ArrayList<>());
                             }
                             user.getCharacters().add(character);
+
+                            user.setBalance(user.getBalance()-15);
                             sharedPreferencesHelper.saveUser(user);
 
                             // Navigate away
@@ -522,6 +636,8 @@ public class MainActivity extends AppCompatActivity {
 
                         } else if (response.code() == 402) {
                             Toast.makeText(MainActivity.this, "Insufficient funds", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(MainActivity.this, GoldActivity.class);
+                            startActivity(intent);
                             //confirmCharacterGenerationConstraintLayout.setVisibility(View.VISIBLE);
 
                         } else {
@@ -541,6 +657,56 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void hideMainUI() {
+
+
+        settingsButton.setVisibility(View.INVISIBLE);
+        exploreButton.setVisibility(View.INVISIBLE);
+        tasksButton.setVisibility(View.INVISIBLE);
+        settingsButton.setVisibility(View.INVISIBLE);
+        connectButton.setVisibility(View.INVISIBLE);
+        goldButton.setVisibility(View.INVISIBLE);
+        generateCharacterTextView.setVisibility(View.INVISIBLE);
+        helpTextView.setVisibility(View.INVISIBLE);
+        textInputLayout.setVisibility(View.INVISIBLE);
+        earlyAdopterBadgeConstraintLayout.setVisibility(View.INVISIBLE);
+        verifiedBadgeConstraintLayout.setVisibility(View.INVISIBLE);
+
+    }
+
+    private void showMainUI() {
+
+        settingsButton.setVisibility(View.VISIBLE);
+        exploreButton.setVisibility(View.VISIBLE);
+        tasksButton.setVisibility(View.VISIBLE);
+        settingsButton.setVisibility(View.VISIBLE);
+        connectButton.setVisibility(View.VISIBLE);
+        goldButton.setVisibility(View.VISIBLE);
+        generateCharacterTextView.setVisibility(View.VISIBLE);
+        helpTextView.setVisibility(View.VISIBLE);
+
+        earlyAdopterBadgeConstraintLayout.setVisibility(View.VISIBLE);
+        verifiedBadgeConstraintLayout.setVisibility(View.VISIBLE);
+
+        textInputLayout.setVisibility(View.VISIBLE);
+
+    }
+
+    private void hideDayBreakerUI() {
+
+        closeDayBreakerMenuButton.setVisibility(View.INVISIBLE);
+        cameraImageView.setVisibility(View.INVISIBLE);
+        heatingElementImageView.setVisibility(View.INVISIBLE);
+
+    }
+
+    private void showDayBreakerUI() {
+
+        closeDayBreakerMenuButton.setVisibility(View.VISIBLE);
+        cameraImageView.setVisibility(View.VISIBLE);
+        heatingElementImageView.setVisibility(View.VISIBLE);
+    }
+
 
     String[] getCharacterNames(User user) {
 
@@ -554,6 +720,8 @@ public class MainActivity extends AppCompatActivity {
 
         return characterNames ;
     }
+
+
 
 
     private void getCsrfToken() {

@@ -2,6 +2,8 @@ package com.accelerate.napknbook.edit;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,12 +11,16 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -24,6 +30,7 @@ import com.accelerate.napknbook.api.RetrofitClientInstance;
 import com.accelerate.napknbook.database.repositories.TaskRepository;
 import com.accelerate.napknbook.models.Skill;
 import com.accelerate.napknbook.models.Task;
+import com.accelerate.napknbook.models.TaskCategory;
 import com.accelerate.napknbook.models.UpdateTaskRequestBody;
 import com.accelerate.napknbook.models.User;
 import com.accelerate.napknbook.utils.SharedPreferencesHelper;
@@ -39,7 +46,7 @@ import retrofit2.Response;
 public class EditTaskActivity extends AppCompatActivity {
 
     private EditText titleEditText, descriptionEditText;
-    private TextView dueDateTextView, highPriorityTextView, clearDueDateButton, doneTextView, closeTextView;
+    private TextView dueDateTextView, highPriorityTextView, clearDueDateButton, doneTextView, closeTextView, deleteTextView;
     private View dueDateContainer;
 
     private SharedPreferencesHelper sharedPreferencesHelper;
@@ -48,6 +55,11 @@ public class EditTaskActivity extends AppCompatActivity {
     private String taskPk, characterPk, categoryPk, authToken;
     private boolean isHighPriority = false;
     private Calendar selectedDate = null;
+
+    Button cancelTaskDeleteButton;
+    Button confirmTaskDeleteButton ;
+
+    ConstraintLayout confirmTaskDeleteConstraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +86,9 @@ public class EditTaskActivity extends AppCompatActivity {
         String oldTitle = getIntent().getStringExtra("title");
         String oldDescription = getIntent().getStringExtra("description");
         String oldDueDate = getIntent().getStringExtra("dueDate");
+        if (oldDueDate != null) {
+            oldDueDate = oldDueDate.split(" ")[0];
+        }
         String oldPriority = getIntent().getStringExtra("priority");
 
         // Bind UI
@@ -85,7 +100,8 @@ public class EditTaskActivity extends AppCompatActivity {
         highPriorityTextView = findViewById(R.id.highPriorityTextView2);
         doneTextView = findViewById(R.id.doneTextView);
         closeTextView = findViewById(R.id.closeTextView);
-
+        deleteTextView = findViewById(R.id.deleteTextView);
+        confirmTaskDeleteConstraintLayout = findViewById(R.id.confirmTaskDeleteConstraintLayout);
         // Prefill fields
         titleEditText.setText(oldTitle);
         descriptionEditText.setText(oldDescription);
@@ -94,12 +110,45 @@ public class EditTaskActivity extends AppCompatActivity {
         isHighPriority = "high".equalsIgnoreCase(oldPriority);
         updateHighPriorityUI();
 
+        deleteTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                confirmTaskDeleteConstraintLayout.setVisibility(View.VISIBLE);
+
+            }
+        });
+
         highPriorityTextView.setOnClickListener(v -> {
             isHighPriority = !isHighPriority;
             updateHighPriorityUI();
+
+
         });
 
-        dueDateTextView.setOnClickListener(v -> showDatePicker());
+        cancelTaskDeleteButton = findViewById(R.id.cancelTaskDeleteButton);
+        cancelTaskDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmTaskDeleteConstraintLayout.setVisibility(View.GONE);
+            }
+        });
+
+        confirmTaskDeleteButton = findViewById(R.id.confirmTaskDeleteButton);
+        confirmTaskDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String token = sharedPreferencesHelper.getAuthToken();
+                taskViewModel.deleteTask(taskPk, token);
+                finish();
+
+            }
+        });
+
+
+
+        dueDateContainer.setOnClickListener(v -> showDatePicker());
         clearDueDateButton.setOnClickListener(v -> clearDueDate());
 
         doneTextView.setOnClickListener(v -> submitEditedTask());
@@ -208,5 +257,40 @@ public class EditTaskActivity extends AppCompatActivity {
     public abstract static class SimpleTextWatcher implements TextWatcher {
         @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+    }
+
+
+
+    private void animatePulse(View pulseView, ImageView raysView, int color) {
+        pulseView.setBackgroundTintList(ColorStateList.valueOf(color));
+        raysView.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+        pulseView.setVisibility(View.VISIBLE);
+        pulseView.setScaleX(0.1f);
+        pulseView.setScaleY(0.1f);
+        pulseView.setAlpha(0.8f);
+
+        pulseView.animate()
+                .scaleX(2.0f)
+                .scaleY(2.0f)
+                .alpha(0f)
+                .setDuration(400)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .withEndAction(() -> pulseView.setVisibility(View.INVISIBLE))
+                .start();
+
+        raysView.setVisibility(View.VISIBLE);
+        raysView.setScaleX(1.0f);
+        raysView.setScaleY(1.0f);
+        raysView.setAlpha(1.0f);
+
+        raysView.animate()
+                .scaleX(2.8f)
+                .scaleY(2.8f)
+                .alpha(0f)
+                .setDuration(1000)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .withEndAction(() -> raysView.setVisibility(View.INVISIBLE))
+                .start();
     }
 }

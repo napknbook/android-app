@@ -24,6 +24,15 @@ public class User {
     @SerializedName("name")
     public String name;
 
+    @SerializedName("early_adopter_badge_level")
+    public String early_adopter_badge_level;
+
+    @SerializedName("verified_badge_level")
+    public String verified_badge_level;
+
+    @SerializedName("balance")
+    public Integer balance;
+
     @Ignore
     @SerializedName("characters")
     public ArrayList<Character> characters;
@@ -68,6 +77,30 @@ public class User {
 
     public void setCharacters(ArrayList<Character> characters) {
         this.characters = characters;
+    }
+
+    public String getEarly_adopter_badge_level() {
+        return early_adopter_badge_level;
+    }
+
+    public void setEarly_adopter_badge_level(String early_adopter_badge_level) {
+        this.early_adopter_badge_level = early_adopter_badge_level;
+    }
+
+    public String getVerified_badge_level() {
+        return verified_badge_level;
+    }
+
+    public void setVerified_badge_level(String verified_badge_level) {
+        this.verified_badge_level = verified_badge_level;
+    }
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
     }
 
     public long getLocalCreatedOn() {

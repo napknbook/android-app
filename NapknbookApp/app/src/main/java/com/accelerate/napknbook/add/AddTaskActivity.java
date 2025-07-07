@@ -1,9 +1,12 @@
 package com.accelerate.napknbook.add;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +37,8 @@ public class AddTaskActivity extends AppCompatActivity {
     ImageView goldImageView ;
     EditText categoryEditText ;
     TextView highPriorityTextView;
+    View  highPriorityPulseView;
+    ImageView  highPriorityRaysView;
 
     boolean isHighPriority = true;
 
@@ -46,7 +51,6 @@ public class AddTaskActivity extends AppCompatActivity {
         sharedPreferencesHelper = SharedPreferencesHelper.getInstance(this);
         final String[] csrfToken = new String[1];
         authToken[0] = sharedPreferencesHelper.getAuthToken();
-
 
         updateHighPriorityUI();
 
@@ -84,7 +88,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
 
 
-                Call<Skill> call = service.generateSkill("Basic " + authToken[0], csrfToken[0], null);
+                Call<Skill> call = service.generateSkill("Bearer " + authToken[0], csrfToken[0], null);
 
                 call.enqueue(new Callback<Skill>() {
                     @Override
@@ -127,5 +131,39 @@ public class AddTaskActivity extends AppCompatActivity {
             highPriorityTextView.setText("❕");
             highPriorityTextView.setTextColor(getResources().getColor(R.color.grey)); // use subtle grey
         }
+    }
+
+
+    private void animatePulse(View pulseView, ImageView raysView, int color) {
+        pulseView.setBackgroundTintList(ColorStateList.valueOf(color));
+        raysView.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+        pulseView.setVisibility(View.VISIBLE);
+        pulseView.setScaleX(0.1f);
+        pulseView.setScaleY(0.1f);
+        pulseView.setAlpha(0.8f);
+
+        pulseView.animate()
+                .scaleX(2.0f)
+                .scaleY(2.0f)
+                .alpha(0f)
+                .setDuration(400)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .withEndAction(() -> pulseView.setVisibility(View.INVISIBLE))
+                .start();
+
+        raysView.setVisibility(View.VISIBLE);
+        raysView.setScaleX(1.0f);
+        raysView.setScaleY(1.0f);
+        raysView.setAlpha(1.0f);
+
+        raysView.animate()
+                .scaleX(2.8f)
+                .scaleY(2.8f)
+                .alpha(0f)
+                .setDuration(1000)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .withEndAction(() -> raysView.setVisibility(View.INVISIBLE))
+                .start();
     }
 }

@@ -40,7 +40,7 @@ public class TaskCategoryRepository {
 
     public void syncIfNeeded(String token, String characterPk, CategoriesCallback callback) {
         executor.execute(() -> {
-            List<TaskCategory> localCategories = categoryDao.getAllTaskCategories();
+            List<TaskCategory> localCategories = categoryDao.getAllTaskCategories(characterPk);
 
             if (localCategories.isEmpty()) {
                 Log.d(TAG, "No categories found, syncing from server.");
@@ -58,8 +58,7 @@ public class TaskCategoryRepository {
                 syncCategoriesFromServer(token, characterPk, callback);
             } else {
                 Log.d(TAG, "Categories are recent, no sync needed.");
-                List<TaskCategory> freshList = categoryDao.getAllTaskCategoriesNow(characterPk);
-                callback.onSuccess(freshList);
+                callback.onSuccess(localCategories);
             }
         });
     }
@@ -67,7 +66,7 @@ public class TaskCategoryRepository {
 
     // --- Sync categories from server ---
     public void syncCategoriesFromServer(String token, String characterPk, CategoriesCallback callback) {
-        api.getTaskCategories("Basic " + token, characterPk).enqueue(new Callback<List<TaskCategory>>() {
+        api.getTaskCategories("Bearer " + token, characterPk).enqueue(new Callback<List<TaskCategory>>() {
             @Override
             public void onResponse(Call<List<TaskCategory>> call, Response<List<TaskCategory>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -101,7 +100,7 @@ public class TaskCategoryRepository {
 
 
     public void createTaskCategory(String token, Map<String, String> categoryData, CategoryCallback callback) {
-        api.createTaskCategory("Basic " + token, categoryData).enqueue(new Callback<TaskCategory>() {
+        api.createTaskCategory("Bearer " + token, categoryData).enqueue(new Callback<TaskCategory>() {
             @Override
             public void onResponse(Call<TaskCategory> call, Response<TaskCategory> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -123,7 +122,7 @@ public class TaskCategoryRepository {
 
     // --- Update a category with a callback ---
     public void updateTaskCategory(String token, String categoryPk, Map<String, String> categoryData, CategoryCallback callback) {
-        api.updateTaskCategory("Basic " + token, categoryPk, categoryData).enqueue(new Callback<TaskCategory>() {
+        api.updateTaskCategory("Bearer " + token, categoryPk, categoryData).enqueue(new Callback<TaskCategory>() {
             @Override
             public void onResponse(Call<TaskCategory> call, Response<TaskCategory> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -156,7 +155,7 @@ public class TaskCategoryRepository {
             return;
         }
 
-        api.deleteTaskCategory("Basic " + token, category.getPk()).enqueue(new Callback<ResponseBody>() {
+        api.deleteTaskCategory("Bearer " + token, category.getPk()).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
@@ -188,21 +187,22 @@ public class TaskCategoryRepository {
 
 
     // --- Load from local DB (blocking) ---
-    public List<TaskCategory> getLocalTaskCategoriesNow() {
-        try {
-            return categoryDao.getAllTaskCategories();
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to fetch categories", e);
-            return Collections.emptyList();
-        }
-    }
+    //public List<TaskCategory> getLocalTaskCategoriesNow() {
+    //    try {
+    //        return categoryDao.getAllTaskCategories();
+    //    } catch (Exception e) {
+    //        Log.e(TAG, "Failed to fetch categories", e);
+    //        return Collections.emptyList();
+    //    }
+    //}
+
     public void getAllCategories(String token, String characterPk, CategoriesCallback callback) {
         executor.execute(() -> {
             List<TaskCategory> local = categoryDao.getAllTaskCategoriesNow(characterPk);
 
             if (local == null || local.isEmpty()) {
                 Log.d(TAG, "No local categories, syncing from server");
-                api.getTaskCategories("Basic " + token, characterPk).enqueue(new Callback<List<TaskCategory>>() {
+                api.getTaskCategories("Bearer " + token, characterPk).enqueue(new Callback<List<TaskCategory>>() {
                     @Override
                     public void onResponse(Call<List<TaskCategory>> call, Response<List<TaskCategory>> response) {
                         if (response.isSuccessful() && response.body() != null) {
@@ -227,9 +227,8 @@ public class TaskCategoryRepository {
             }
         });
     }
-
-
     public interface CategoriesCallback {
+
         void onSuccess(List<TaskCategory> categories);
         void onFailure(String error);
     }

@@ -26,12 +26,15 @@ import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.accelerate.napknbook.api.NapknbookService;
 import com.accelerate.napknbook.api.RetrofitClientInstance;
 import com.accelerate.napknbook.utils.SharedPreferencesHelper;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.json.JSONArray;
@@ -63,6 +66,10 @@ public class CameraActivity extends AppCompatActivity {
     private Camera camera;
     private ImageCapture imageCapture;
     private ExecutorService cameraExecutor;
+    private Button cancelTasksGenerationButton ;
+    private Button confirmTasksGenerationButton ;
+    private ConstraintLayout confirmTasksGenerationConstraintLayout ;
+    private ConstraintLayout loadingConstraintLayout;
 
     private String characterPk;
     private String authToken;
@@ -105,9 +112,40 @@ public class CameraActivity extends AppCompatActivity {
             startCamera();
         });
 
+        confirmTasksGenerationConstraintLayout = findViewById(R.id.confirmTasksGenerationConstraintLayout);
+        loadingConstraintLayout = findViewById(R.id.loadingSpinnerConstraintLayout);
+
+
+        cancelTasksGenerationButton = findViewById(R.id.cancelTasksGenerationButton);
+        cancelTasksGenerationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmTasksGenerationConstraintLayout.setVisibility(View.GONE);
+            }
+        });
+
+        ImageView goldImageView = findViewById(R.id.goldImageView);
+
+        Glide.with(getApplicationContext())
+                .load(R.drawable.gold)
+                .transform(new CircleCrop())
+                .into(goldImageView);
+
         btnConfirmSend.setOnClickListener(v -> {
-            if (latestPhotoFile != null) {
-                uploadImage(latestPhotoFile);
+
+            confirmTasksGenerationConstraintLayout.setVisibility(View.VISIBLE);
+
+        });
+
+        confirmTasksGenerationButton = findViewById(R.id.confirmTasksGenerationButton);
+        confirmTasksGenerationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (latestPhotoFile != null) {
+                    uploadImage(latestPhotoFile);
+                    confirmTasksGenerationConstraintLayout.setVisibility(View.GONE);
+                    loadingConstraintLayout.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -173,7 +211,7 @@ public class CameraActivity extends AppCompatActivity {
         RequestBody characterPart = RequestBody.create(MediaType.parse("text/plain"), characterPk);
 
         NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
-        Call<ResponseBody> call = service.uploadImage("Basic " + authToken, characterPart, imagePart);
+        Call<ResponseBody> call = service.uploadImage("Bearer " + authToken, characterPart, imagePart);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override

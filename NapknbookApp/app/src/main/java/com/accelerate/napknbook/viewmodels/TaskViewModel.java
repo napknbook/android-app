@@ -20,7 +20,8 @@ public class TaskViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     private final MutableLiveData<Boolean> creationStatus = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> updateStatus = new MutableLiveData<>(); // ✅ NEW
+    private final MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> singleTaskDeletionStatus = new MutableLiveData<>();// ✅ NEW
 
     private final TaskRepository repository;
     private final TaskUpdateDebouncer debouncer ;
@@ -53,6 +54,10 @@ public class TaskViewModel extends ViewModel {
 
     public LiveData<Boolean> getUpdateStatus() {
         return updateStatus;
+    }
+
+    public LiveData<Boolean> getSingleTaskDeletionStatus() { // NEW
+        return singleTaskDeletionStatus;
     }
 
     public LiveData<List<Task>> getTasksForCategory(String characterPk, String categoryPk) {
@@ -113,6 +118,7 @@ public class TaskViewModel extends ViewModel {
         });
     }
 
+
     // --- Delete Completed Tasks ---
     public void deleteCompletedTasks(String categoryPk, String token) {
         repository.deleteCompletedTasksForCategory(categoryPk, token, new TaskRepository.DeletionCallback() {
@@ -127,6 +133,22 @@ public class TaskViewModel extends ViewModel {
             }
         });
     }
+
+    public void deleteTask(String taskPk, String token) {
+        repository.deleteTask(taskPk, token, new TaskRepository.DeletionCallback() {
+            @Override
+            public void onSuccess() {
+                singleTaskDeletionStatus.postValue(true);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                errorMessage.postValue(error);
+                singleTaskDeletionStatus.postValue(false);
+            }
+        });
+    }
+
 
     // --- Update Task ---
     public void updateTask(Task task, String token) {

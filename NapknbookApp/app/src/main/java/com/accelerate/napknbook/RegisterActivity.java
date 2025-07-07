@@ -1,6 +1,7 @@
 package com.accelerate.napknbook;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     ImageButton signUpGoogleButton;
     GoogleSignInClient mGoogleSignInClient ;
     private static final int RC_SIGN_UP = 9002;
+    ConstraintLayout loadingConstraintLayout ;
     SharedPreferencesHelper sharedPreferencesHelper ;
     final String[] csrfToken = new String[1];
     final String[] authToken = new String[1];
@@ -69,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPasswordEditText = findViewById(R.id.registerConfirmPasswordEditText);
         errorTextView = findViewById(R.id.errorTextView);
         registerButton = findViewById(R.id.registerButton);
+        loadingConstraintLayout = findViewById(R.id.loadingSpinnerConstraintLayout);
 
 
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 registerButton.setEnabled(false);
+                loadingConstraintLayout.setVisibility(View.VISIBLE);
 
                 errorTextView.setVisibility(View.GONE);
 
@@ -84,75 +88,92 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = String.valueOf(passwordEditText.getText());
                 String confirmPassword = String.valueOf(confirmPasswordEditText.getText());
 
-                if (password.equals(confirmPassword)) {
+                if (password.length() < 8) {
+                    registerButton.setEnabled(true);
+                    errorTextView.setText("Password must be at least 8 characters");
+                    errorTextView.setVisibility(View.VISIBLE);
+                    loadingConstraintLayout.setVisibility(View.GONE);
+                    return;  // This will exit the onClick method early
+                }
 
-                    NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
-                    RegisterRequest registerRequest = new RegisterRequest(username, email, password, "");
-
-                    Call<AuthResponse> call = service.registerUser(registerRequest);
-                    call.enqueue(new Callback<AuthResponse>() {
-
-                        @Override
-                        public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                            if (response.isSuccessful()) {
-                                // Registration successful
-                                AuthResponse authResponse = response.body();
-                                String token = authResponse.getToken();
-                                User user = authResponse.getUser();
-
-                                sharedPreferencesHelper.saveAuthToken(token);
-                                sharedPreferencesHelper.saveUser(user);
-                                sharedPreferencesHelper.saveUserPk(user.pk);
-                                sharedPreferencesHelper.setMainCharacterName(user.name + "#0");
-
-                                // Save UserEntity to local Room database
-                                UserRepository repository = new UserRepository(getApplicationContext());
-                                repository.insertUser(user);
+                if (!password.equals(confirmPassword)) {
+                    registerButton.setEnabled(true);
+                    errorTextView.setText("Passwords don't match");
+                    errorTextView.setVisibility(View.VISIBLE);
+                    loadingConstraintLayout.setVisibility(View.GONE);
+                    return;  // This will exit the onClick method early
+                }
 
 
-                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
 
-                            } // Handle request errors depending on status code (e.g., 400, 401, 403, etc.)
+                NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
+                RegisterRequest registerRequest = new RegisterRequest(username, email, password, "");
 
-                            else if (response.code() == 401){
-                                registerButton.setEnabled(true);
-                                errorTextView.setText("401");
-                                errorTextView.setVisibility(View.VISIBLE);
+                Call<AuthResponse> call = service.registerUser(registerRequest);
+                call.enqueue(new Callback<AuthResponse>() {
 
-                            }
+                    @Override
+                    public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                        if (response.isSuccessful()) {
+                            // Registration successful
+                            AuthResponse authResponse = response.body();
+                            String token = authResponse.getToken();
+                            User user = authResponse.getUser();
 
-                            else if (response.code() == 409) {
-                                registerButton.setEnabled(true);
+                            sharedPreferencesHelper.saveAuthToken(token);
+                            sharedPreferencesHelper.saveUser(user);
+                            sharedPreferencesHelper.saveUserPk(user.pk);
+                            sharedPreferencesHelper.setMainCharacterName(user.name + "#0");
 
-                                errorTextView.setText("Username already taken");
-                                errorTextView.setVisibility(View.VISIBLE);
-                            }
+                            // Save UserEntity to local Room database
+                            UserRepository repository = new UserRepository(getApplicationContext());
+                            repository.insertUser(user);
+
+
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        } // Handle request errors depending on status code (e.g., 400, 401, 403, etc.)
+
+                        else if (response.code() == 401){
+                            registerButton.setEnabled(true);
+                            errorTextView.setText("401");
+                            errorTextView.setVisibility(View.VISIBLE);
+                            loadingConstraintLayout.setVisibility(View.GONE);
+
+
+                        }
+
+                        else if (response.code() == 409) {
+                            registerButton.setEnabled(true);
+
+                            errorTextView.setText("Username already taken");
+                            errorTextView.setVisibility(View.VISIBLE);
+                            loadingConstraintLayout.setVisibility(View.GONE);
+
+                        }
 
                             else {
                                 registerButton.setEnabled(true);
 
                                 errorTextView.setText(response.message());
                                 errorTextView.setVisibility(View.VISIBLE);
+                                loadingConstraintLayout.setVisibility(View.GONE);
+
                             }
                         }
 
                         @Override
                         public void onFailure(Call<AuthResponse> call, Throwable t) {
                             registerButton.setEnabled(true);
+                            loadingConstraintLayout.setVisibility(View.GONE);
 
                             // Handle failure: network error, exception, etc.
                         }
                     });
 
-                } else {
-                    registerButton.setEnabled(true);
-
-                    errorTextView.setText("Passwords Don't match");
-                    errorTextView.setVisibility(View.VISIBLE);
                 }
-            }
         });
 
         signUpGoogleButton = findViewById(R.id.signUpGoogleButton);
@@ -189,6 +210,8 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        loadingConstraintLayout.setVisibility(View.VISIBLE);
+
         if (requestCode == RC_SIGN_UP) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -225,6 +248,8 @@ public class RegisterActivity extends AppCompatActivity {
                             // Handle request errors depending on status code (e.g., 400, 401, 403, etc.)
                             errorTextView.setText("Google registration failed. Try again.");
                             errorTextView.setVisibility(View.VISIBLE);
+                            loadingConstraintLayout.setVisibility(View.GONE);
+
                         }
                     }
 
@@ -233,6 +258,8 @@ public class RegisterActivity extends AppCompatActivity {
                         errorTextView.setText("Network error. Please check your connection.");
                         errorTextView.setVisibility(View.VISIBLE);
                         Log.e("RegisterActivity", "Google registration failed: " + t.getMessage());
+                        loadingConstraintLayout.setVisibility(View.GONE);
+
                     }
                 });
             } catch (ApiException e) {
@@ -240,6 +267,8 @@ public class RegisterActivity extends AppCompatActivity {
                 errorTextView.setText("Google Sign-In failed. Try again.");
                 errorTextView.setVisibility(View.VISIBLE);
                 Log.e("RegisterActivity", "Google Sign-In failed", e);
+                loadingConstraintLayout.setVisibility(View.GONE);
+
             }
         }
     }

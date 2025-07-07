@@ -401,11 +401,11 @@
         android:layout_width="300dp"
         android:layout_height="450dp"
         android:background="@drawable/inventory_border"
+        android:padding="2dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:padding="2dp"
         app:layout_constraintTop_toTopOf="@+id/appBarLayout">
 
         <TextView
@@ -422,7 +422,6 @@
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
 
         <TextView
@@ -509,7 +508,10 @@
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="5dp"
+                tools:layout_editor_absoluteX="108dp"
+                tools:layout_editor_absoluteY="5dp"
+                tools:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -558,7 +560,10 @@
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="5dp"
+                tools:layout_editor_absoluteX="198dp"
+                tools:layout_editor_absoluteY="5dp"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -606,7 +611,10 @@
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="5dp"
+                tools:layout_editor_absoluteX="153dp"
+                tools:layout_editor_absoluteY="5dp"
+                tools:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -654,7 +662,10 @@
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="5dp"
+                tools:layout_editor_absoluteX="198dp"
+                tools:layout_editor_absoluteY="5dp"
+                tools:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -765,7 +776,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$4.95 CAD / month"
+                    android:text="$4.99 CAD / month"
                     android:textColor="@color/green"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"

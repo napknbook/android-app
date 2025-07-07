@@ -153,7 +153,7 @@ public class SkillActivity extends AppCompatActivity {
 //        String skillPk = skill.getPk() ;
 //
 //        NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
-//        Call<Skill> call = service.getSkill("Basic " + authToken[0], characterPk, skillPk);
+//        Call<Skill> call = service.getSkill("Bearer " + authToken[0], characterPk, skillPk);
 //        call.enqueue(new Callback<Skill> () {
 //            @Override
 //            public void onResponse(Call<Skill>  call, Response<Skill>  response) {
@@ -182,7 +182,7 @@ public class SkillActivity extends AppCompatActivity {
     public void setUpConversations() {
 
         NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
-        Call<List<Convo>> call = service.getConvos("Basic " + authToken[0], skill.getPk());
+        Call<List<Convo>> call = service.getConvos("Bearer " + authToken[0], skill.getPk());
         call.enqueue(new Callback<List<Convo>>() {
             @Override
             public void onResponse(Call<List<Convo>> call, Response<List<Convo>> response) {

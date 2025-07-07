@@ -53,6 +53,9 @@ public interface TaskDao {
     @Delete
     void deleteTask(Task task);
 
+    @Query("DELETE FROM tasks WHERE pk = :taskPk")
+    void deleteTask(String taskPk);
+
     @Query("DELETE FROM tasks WHERE categoryPk = :categoryPk AND completed = 1")
     void deleteCompletedTasks(String categoryPk);
 

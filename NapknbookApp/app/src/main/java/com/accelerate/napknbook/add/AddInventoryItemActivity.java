@@ -94,41 +94,6 @@ public class AddInventoryItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String skillName = String.valueOf(skillNameEditText.getText());
-                int skillLevel = Math.round(skillLevelSlider.getValue()) ;
-                String characterPk = user.getCharacters().get(mainCharacterindex).getPk();
-                NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
-                SkillRequestBody skillRequestBody = new SkillRequestBody(skillName, skillLevel, characterPk);
-
-                Call<Skill> call = service.generateSkill("Basic " + authToken[0], csrfToken[0], skillRequestBody);
-
-                call.enqueue(new Callback<Skill>() {
-                    @Override
-                    public void onResponse(Call<Skill> call, Response<Skill>response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            Skill skill = response.body();
-                            Intent intent = new Intent();
-                            setResult(RESULT_OK, intent);
-                            finish();
-                            // Save to local storage or update UI
-                        } else {
-                            // Handle errors (e.g., insufficient funds, invalid input)
-                            Log.e("Skill Generation", "Error: " + response.code() + " " + response.message());
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Skill> call, Throwable t) {
-                        Log.e("Skill Generation", "Failed to call API: " + t.getMessage());
-                    }
-                });
-
-                //Intent intent = new Intent();
-                //setResult(Activity.RESULT_OK, intent);
-                //finish();
-
-
 
             }
         });

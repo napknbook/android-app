@@ -101,7 +101,7 @@ public class AddSkillActivity extends AppCompatActivity {
                 NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
                 SkillRequestBody skillRequestBody = new SkillRequestBody(skillName, skillLevel, characterPk);
 
-                Call<Skill> call = service.generateSkill("Basic " + authToken[0], csrfToken[0], skillRequestBody);
+                Call<Skill> call = service.generateSkill("Bearer " + authToken[0], csrfToken[0], skillRequestBody);
                 call.enqueue(new Callback<Skill>() {
                     @Override
                     public void onResponse(Call<Skill> call, Response<Skill>response) {

@@ -298,7 +298,7 @@ public interface NapknbookService {
             @Body GoogleLoginRequest request);
 
     @POST("/api/verify-purchase/")
-    Call<ResponseBody> verifyPurchase(
+    Call<AuthResponse> verifyPurchase(
             @Header("Authorization") String token,
             @Body PurchaseVerificationRequest request
     );

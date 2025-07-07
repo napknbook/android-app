@@ -15,8 +15,14 @@ import java.util.List;
 public interface TaskCategoryDao {
 
     // Use this only if you truly want ALL categories
-    @Query("SELECT * FROM task_categories")
-    List<TaskCategory> getAllTaskCategories();
+    //@Query("SELECT * FROM task_categories")
+    //List<TaskCategory> getAllTaskCategories();
+
+
+    // 🔥 FIXED: Only get categories for a specific character
+    @Query("SELECT * FROM task_categories WHERE characterPk = :characterPk ORDER BY `order` ASC")
+    List<TaskCategory> getAllTaskCategories(String characterPk);
+
 
     // 🔥 FIXED: Only get categories for a specific character
     @Query("SELECT * FROM task_categories WHERE characterPk = :characterPk ORDER BY `order` ASC")

@@ -115,7 +115,7 @@ public class SettingsActivity extends AppCompatActivity {
             logoutTextView.setVisibility(View.VISIBLE);
 
             // Show Cancel Subscription button only if user is subscribed
-            if (sharedPreferencesHelper.isSubscribed()) {
+            if (!sharedPreferencesHelper.getUser().getVerified_badge_level().equals("0")) {
                 cancelSubTextView.setVisibility(View.VISIBLE);
             } else {
                 cancelSubTextView.setVisibility(View.GONE);
@@ -172,6 +172,14 @@ public class SettingsActivity extends AppCompatActivity {
         contactTextView.setOnClickListener(v -> Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show());
         reportTextView.setOnClickListener(v -> Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show());
         aboutTextView.setOnClickListener(v -> Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show());
+
+        aboutTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://napknbook.com/"));
+                startActivity(browserIntent);
+            }
+        });
 
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override

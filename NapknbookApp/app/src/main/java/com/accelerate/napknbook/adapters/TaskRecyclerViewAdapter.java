@@ -29,6 +29,7 @@ import com.accelerate.napknbook.models.Task;
 import com.accelerate.napknbook.utils.SharedPreferencesHelper;
 import com.accelerate.napknbook.viewmodels.TaskViewModel;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +105,13 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         public void bind(Task task) {
             taskTextView.setText(task.getTitle());
             contentTextView.setText(task.getDescription());
-            dueDateTextView.setText(task.getDueDate());
+            String dueDate = task.getDueDate() ;
+            if (task.getDueDate() == null) {
+                dueDateTextView.setText(task.getDueDate());
+            }
+            else {
+                dueDateTextView.setText(task.getDueDate().split(" ")[0]);
+            }
             completedTextView.setText(task.isCompleted() ? "✓" : "");
             highPriorityTextView.setText(task.getPriority().equals("high") ? "❗" : "❕");
 

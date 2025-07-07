@@ -41,7 +41,7 @@ public class CharacterRepository {
 
     public void syncCharactersFromServer(String token) {
 
-        api.getCharacters("Basic " + token).enqueue(new Callback<List<Character>>() {
+        api.getCharacters("Bearer " + token).enqueue(new Callback<List<Character>>() {
             @Override
             public void onResponse(Call<List<Character>> call, Response<List<Character>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -90,7 +90,7 @@ public class CharacterRepository {
 
 
     public void createCharacter(Character character, String token) {
-        api.createCharacter("Basic " + token, character).enqueue(new Callback<Character>() {
+        api.createCharacter("Bearer " + token, character).enqueue(new Callback<Character>() {
             @Override
             public void onResponse(Call<Character> call, Response<Character> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -106,7 +106,7 @@ public class CharacterRepository {
     }
 
     public void updateCharacter(Character character, String token) {
-        api.updateCharacter("Basic " + token, character.getPk(), character).enqueue(new Callback<Character>() {
+        api.updateCharacter("Bearer " + token, character.getPk(), character).enqueue(new Callback<Character>() {
             @Override
             public void onResponse(Call<Character> call, Response<Character> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -122,7 +122,7 @@ public class CharacterRepository {
     }
 
     public void deleteCharacter(Character character, String token) {
-        api.deleteCharacter("Basic " + token, character.getPk()).enqueue(new Callback<ResponseBody>() {
+        api.deleteCharacter("Bearer " + token, character.getPk()).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

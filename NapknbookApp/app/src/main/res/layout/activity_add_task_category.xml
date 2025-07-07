@@ -17,6 +17,7 @@
         android:text="X"
         android:textColor="@color/white"
         android:textSize="32dp"
+        android:padding="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,6 +41,7 @@
         android:text="Done"
         android:textColor="@color/green"
         android:textSize="24dp"
+        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/textView16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView16" />

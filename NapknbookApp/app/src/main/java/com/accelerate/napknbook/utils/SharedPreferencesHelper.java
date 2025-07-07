@@ -15,13 +15,15 @@ import java.util.ArrayList;
 
 public class SharedPreferencesHelper {
 
-    private static final String PREFERENCES_FILE = "napknbookPrefFile2";
+    private static final String PREFERENCES_FILE = "napknbookPrefFile3";
     private static final String AUTH_TOKEN_KEY = "auth_token";
     private static final String USER_PK_KEY = "user_pk";
     private static final String MAIN_CHARACTER_NAME_KEY = "main_character_name";
     private static final String USER_KEY = "user" ;
     private static final String ACTIVE_TASK_CATEGORY_KEY = "active_task_category";
-    private static final String MAIN_CHARACTER_PK_KEY = "main_character_pk";  // ✅ Add this!
+    private static final String MAIN_CHARACTER_PK_KEY = "main_character_pk";
+    private static final String FIRST_STARTUP_KEY = "first_startup";
+
 
 
     private SharedPreferences sharedPreferences;
@@ -68,6 +70,14 @@ public class SharedPreferencesHelper {
 
     public String getUserPk() {
         return sharedPreferences.getString(USER_PK_KEY, null);
+    }
+
+    public void saveFirstStartup(String firstStartup) {
+        sharedPreferences.edit().putString(FIRST_STARTUP_KEY, firstStartup).apply();
+    }
+
+    public String getFirstStartup() {
+        return sharedPreferences.getString(FIRST_STARTUP_KEY, "1");
     }
 
 

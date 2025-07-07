@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.accelerate.napknbook.api.NapknbookService;
 import com.accelerate.napknbook.api.RetrofitClientInstance;
+import com.accelerate.napknbook.models.AuthResponse;
+import com.accelerate.napknbook.models.User;
 import com.android.billingclient.api.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -87,7 +89,8 @@ public class GoldActivity extends AppCompatActivity {
         }
         toolbar.getNavigationIcon().setTint(Color.WHITE);
 
-        authToken[0] = SharedPreferencesHelper.getInstance(this).getAuthToken();
+        sharedPreferencesHelper = SharedPreferencesHelper.getInstance(this);
+        authToken[0] = sharedPreferencesHelper.getAuthToken();
         setupBillingClient();
         setupUI();
     }
@@ -250,17 +253,29 @@ public class GoldActivity extends AppCompatActivity {
         PurchaseVerificationRequest request = new PurchaseVerificationRequest(productId, purchaseToken, purchaseType);
 
         NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
-        service.verifyPurchase("Basic " + authToken[0], request).enqueue(new Callback<ResponseBody>() {
+        service.verifyPurchase("Bearer " + authToken[0], request).enqueue(new Callback<AuthResponse>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d("BillingClient", response.isSuccessful() ? "Purchase verified successfully!" : "Backend verification failed.");
-                Intent intent = new Intent(GoldActivity.this, LoadingActivity.class);
-                startActivity(intent);
-                finish();
+            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+
+                if (response.isSuccessful()) {
+                    Log.d("BillingClient", response.isSuccessful() ? "Purchase verified successfully!" : "Backend verification failed.");
+
+                    AuthResponse authResponse = response.body();
+                    User user = authResponse.getUser();
+                    sharedPreferencesHelper.saveUser(user);
+                    sharedPreferencesHelper.saveUserPk(user.pk);
+
+                    Intent intent = new Intent(GoldActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                } else if (response.code() == 401) {
+
+                }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<AuthResponse> call, Throwable t) {
                 Log.e("BillingClient", "Error contacting backend: " + t.getMessage());
 
             }
@@ -305,9 +320,14 @@ public class GoldActivity extends AppCompatActivity {
 
         zBucks250LinearLayout = findViewById(R.id.zbucks_250_button) ;
         zBucks500LinearLayout = findViewById(R.id.zbucks_500_button) ;
+        zBucks500LinearLayout.setVisibility(View.GONE);
         zBucks1000LinearLayout = findViewById(R.id.zbucks_1000_button) ;
         zBucks5000LinearLayout = findViewById(R.id.zbucks_5000_button) ;
+        zBucks5000LinearLayout.setVisibility(View.GONE);
+
         zBucks10000LinearLayout = findViewById(R.id.zbucks_10000_button) ;
+        zBucks10000LinearLayout.setVisibility(View.GONE);
+
         earlyAdopterBadgeLinearLayout = findViewById(R.id.early_adopter_badge_button);
         verifiedBadgeLinearLayout = findViewById(R.id.verified_badge_button);
         subscriptionOfferLinearLayout = findViewById(R.id.subscriptionOfferLinearLayout);
@@ -372,7 +392,7 @@ public class GoldActivity extends AppCompatActivity {
                 goldLinearLayout.setVisibility(View.GONE);
                 noAdsTextView.setVisibility(View.GONE);
                 napknbookInventoryConstraintLayout.setVisibility(View.GONE);
-                dollarsTextView.setText("4.95 / month");
+                dollarsTextView.setText("4.99 / month");
 
 
                 acceptButton.setOnClickListener(new View.OnClickListener() {

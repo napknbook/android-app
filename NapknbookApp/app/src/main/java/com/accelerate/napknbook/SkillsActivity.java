@@ -80,7 +80,7 @@ public class SkillsActivity extends AppCompatActivity {
 
         NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
 
-        Call<List<Skill>> call = service.getSkills("Basic " + authToken[0], "");
+        Call<List<Skill>> call = service.getSkills("Bearer " + authToken[0], "");
         call.enqueue(new Callback<List<Skill>>() {
             @Override
             public void onResponse(Call<List<Skill>> call, Response<List<Skill>> response) {

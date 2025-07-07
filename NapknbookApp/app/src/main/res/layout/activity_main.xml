@@ -67,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/verifiedBadgeLevelTextView"
+            android:id="@+id/earlyAdopterBadgeLevelTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="-3dp"
@@ -102,7 +102,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/verifiedBadgeLevelTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="-3dp"
@@ -242,6 +242,20 @@
     </HorizontalScrollView>
 
     <TextView
+        android:id="@+id/closeDayBreakerMenuTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:padding="16dp"
+        android:text="X"
+        android:textColor="@color/white"
+        android:textSize="42dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/helpImageView" />
+
+    <TextView
         android:id="@+id/generateCharacterTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -252,7 +266,35 @@
         android:textColor="@color/white"
         android:textSize="42dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/helpImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/helpImageView"
+        tools:visibility="visible" />
+
+
+    <ImageView
+        android:id="@+id/heatingElementImageView"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="32dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/thermostat_64dp_ffffff"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/cameraImageView"
+        app:layout_constraintEnd_toEndOf="@+id/cameraImageView"
+        app:layout_constraintStart_toStartOf="@+id/cameraImageView" />
+
+    <ImageView
+        android:id="@+id/cameraImageView"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="350dp"
+        android:src="@drawable/photo_camera"
+        android:scaleType="centerCrop"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/generateCharacterTextView"
+        app:layout_constraintEnd_toEndOf="@+id/generateCharacterTextView"
+        app:layout_constraintStart_toStartOf="@+id/generateCharacterTextView"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/helpImageView"
@@ -260,7 +302,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="350dp"
         android:padding="16dp"
-
+        android:visibility="visible"
         android:text="?"
         android:textColor="@color/white"
         android:textSize="32dp"
@@ -354,7 +396,7 @@
         android:layout_width="300dp"
         android:layout_height="175dp"
         android:background="@drawable/inventory_border"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"

@@ -22,6 +22,7 @@ public class TaskCategoryViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
     private final TaskCategoryRepository repository;
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private final MutableLiveData<Boolean> deleteStatus = new MutableLiveData<>();
     private final MutableLiveData<String> deleteError = new MutableLiveData<>();
@@ -85,17 +86,23 @@ public class TaskCategoryViewModel extends ViewModel {
 
     // --- Load categories from local DB or backend ---
     public void loadCategories(String token, String characterPk) {
-        repository.getAllCategories(token, characterPk, new TaskCategoryRepository.CategoriesCallback() {
+        isLoading.postValue(true);
+
+        repository.syncIfNeeded(token, characterPk, new TaskCategoryRepository.CategoriesCallback() {
             @Override
             public void onSuccess(List<TaskCategory> result) {
                 List<TaskCategory> updated = ensureVirtualCategories(result, characterPk);
                 categories.postValue(updated);
+                isLoading.postValue(false);
+
             }
 
             @Override
             public void onFailure(String error) {
                 Log.e("TaskCategoryViewModel", "Failed to load categories: " + error);
                 errorMessage.postValue("Failed to load categories");
+                isLoading.postValue(false);
+
             }
         });
     }

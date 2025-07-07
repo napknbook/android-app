@@ -1,11 +1,14 @@
 package com.accelerate.napknbook.add;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -122,4 +125,7 @@ public class AddTaskCategoryActivity extends AppCompatActivity {
             categoryViewModel.createTaskCategory(authToken, name, characterPk);
         });
     }
+
+
+
 }

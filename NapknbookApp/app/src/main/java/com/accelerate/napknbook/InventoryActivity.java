@@ -212,7 +212,7 @@ public class InventoryActivity extends AppCompatActivity {
 
 //        NapknbookService service = RetrofitClientInstance.getRetrofitInstance().create(NapknbookService.class);
 //        String characterPk = userEntity.getCharacters().get(sharedPreferencesHelper.getMainCharacterIndex()).getPk() ;
-//        Call<List<InventoryItem>> call = service.getInventory("Basic " + authToken[0], characterPk);
+//        Call<List<InventoryItem>> call = service.getInventory("Bearer " + authToken[0], characterPk);
 //        call.enqueue(new Callback<List<InventoryItem>>() {
 //            @Override
 //            public void onResponse(Call<List<InventoryItem>> call, Response<List<InventoryItem>> response) {

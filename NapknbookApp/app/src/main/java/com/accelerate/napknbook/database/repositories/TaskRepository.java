@@ -62,7 +62,7 @@ public class TaskRepository {
     }
 
     public void syncTasksFromServer(String token, String characterPk, TaskListCallback callback) {
-        api.getTasks("Basic " + token, characterPk).enqueue(new Callback<List<Task>>() {
+        api.getTasks("Bearer " + token, characterPk).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -98,7 +98,7 @@ public class TaskRepository {
     }
 
     public void createTask(CreateTaskRequestBody requestBody, String token, TaskCallback callback) {
-        api.createTask("Basic " + token, requestBody).enqueue(new Callback<Task>() {
+        api.createTask("Bearer " + token, requestBody).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -134,7 +134,7 @@ public class TaskRepository {
         updateTaskRequestBody.setPriority(task.getPriority());
         updateTaskRequestBody.setStatus(task.getStatus());
 
-        api.updateTask("Basic " + token, task.getPk(), updateTaskRequestBody).enqueue(new Callback<Task>() {
+        api.updateTask("Bearer " + token, task.getPk(), updateTaskRequestBody).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -161,7 +161,7 @@ public class TaskRepository {
         Map<String, String> body = new HashMap<String, String>();
         body.put("priority", task.getPriority());
 
-        api.updateTaskPriority("Basic " + token, task.getPk(), body).enqueue(new Callback<ResponseBody>() {
+        api.updateTaskPriority("Bearer " + token, task.getPk(), body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (!response.isSuccessful()) {
@@ -179,7 +179,7 @@ public class TaskRepository {
         Map<String, Object> body = new HashMap<String, Object>();
         body.put("completed", task.isCompleted());
 
-        api.updateTaskField("Basic " + token, task.getPk(), body).enqueue(new Callback<ResponseBody>() {
+        api.updateTaskField("Bearer " + token, task.getPk(), body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (!response.isSuccessful()) {
@@ -199,9 +199,32 @@ public class TaskRepository {
         return taskDao.getTasksByCharacterAndCategory(characterPk, categoryPk);
     }
 
+    public void deleteTask(String taskPk, String token, DeletionCallback callback) {
+        api.deleteTask("Bearer " + token, taskPk).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    executor.execute(() -> {
+                        taskDao.deleteTask(taskPk);
+                        if (callback != null) callback.onSuccess();
+                    });
+                } else {
+                    Log.w(TAG, "Delete task failed: " + response.code());
+                    if (callback != null) callback.onFailure("API Error: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, "Delete task network failure", t);
+                if (callback != null) callback.onFailure("Network error: " + t.getMessage());
+            }
+        });
+    }
+
 
     public void deleteCompletedTasksForCategory(String categoryPk, String token, DeletionCallback callback) {
-        api.deleteCompletedTasks("Basic " + token, categoryPk).enqueue(new Callback<ResponseBody>() {
+        api.deleteCompletedTasks("Bearer " + token, categoryPk).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

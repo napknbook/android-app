@@ -11,11 +11,14 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -30,6 +33,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.accelerate.napknbook.adapters.TaskCategoryPagerAdapter;
 import com.accelerate.napknbook.add.AddTaskCategoryActivity;
 import com.accelerate.napknbook.database.repositories.TaskCategoryRepository;
+import com.accelerate.napknbook.database.repositories.TaskRepository;
 import com.accelerate.napknbook.fragments.TaskCategoryFragment;
 import com.accelerate.napknbook.models.CreateTaskRequestBody;
 import com.accelerate.napknbook.models.TaskCategory;
@@ -43,15 +47,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
-
-
-import android.view.LayoutInflater;
-import android.widget.TextView;
-import android.widget.Toast;
-
-
-import com.accelerate.napknbook.database.repositories.TaskRepository;
-
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,6 +86,8 @@ public class TasksActivity extends AppCompatActivity {
     private String recentlyCreatedCategoryName = null;
 
     private boolean skipNextAddCategoryClick = false;
+
+    private String lastActiveCategory = null;
 
 
 
@@ -132,11 +129,8 @@ public class TasksActivity extends AppCompatActivity {
         token = sharedPreferencesHelper.getAuthToken();
         characterPk = sharedPreferencesHelper.getMainCharacterPk();
 
-        categoryViewModel.syncCategoriesFromServer(token, characterPk);
-        taskViewModel.syncTasksFromServer(token, characterPk);
-
-        categoryViewModel.loadCategories(token, characterPk);
-        taskViewModel.loadTasks(token, characterPk);
+        //categoryViewModel.loadCategories(token, characterPk);
+        //taskViewModel.loadTasks(token, characterPk);
 
         addCategoryLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -633,6 +627,19 @@ public class TasksActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Enhance your onBackPressed():
+    @Override
+    public void onBackPressed() {
+        if (findViewById(R.id.confirmCategoryDeleteFrameLayout).getVisibility() == View.VISIBLE ||
+                findViewById(R.id.confirmCompletedDeleteFrameLayout).getVisibility() == View.VISIBLE) {
+            // Hide confirmation dialogs first
+            findViewById(R.id.confirmCategoryDeleteFrameLayout).setVisibility(View.GONE);
+            findViewById(R.id.confirmCompletedDeleteFrameLayout).setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+        }
     }
 
 

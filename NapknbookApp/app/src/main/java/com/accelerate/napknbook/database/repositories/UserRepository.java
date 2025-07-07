@@ -69,7 +69,7 @@ public class UserRepository {
     public void syncUserFromServer(String token, String userPk) {
 
 
-        api.getUser("Basic " + token, userPk).enqueue(new Callback<User>() {
+        api.getUser("Bearer " + token, userPk).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -92,7 +92,7 @@ public class UserRepository {
     }
 
     public void createUser(User user, String token) {
-        api.createEntity("Basic " + token, user).enqueue(new Callback<User>() {
+        api.createEntity("Bearer " + token, user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -108,7 +108,7 @@ public class UserRepository {
     }
 
     public void updateUser(User user, String token) {
-        api.updateEntity("Basic " + token, user.getPk(), user).enqueue(new Callback<User>() {
+        api.updateEntity("Bearer " + token, user.getPk(), user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -124,7 +124,7 @@ public class UserRepository {
     }
 
     public void deleteUser(User user, String token) {
-        api.deleteEntity("Basic " + token, user.getPk()).enqueue(new Callback<ResponseBody>() {
+        api.deleteEntity("Bearer " + token, user.getPk()).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

@@ -1,6 +1,8 @@
 package com.accelerate.napknbook;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
@@ -53,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     ImageButton signInGoogleButton ;
     GoogleSignInClient mGoogleSignInClient ;
     SharedPreferencesHelper sharedPreferencesHelper ;
+    ConstraintLayout loadingConstraintLayout ;
 
     private static final int RC_SIGN_IN = 9001;
 
@@ -77,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
         errorTextView = findViewById(R.id.errorTextView);
+        loadingConstraintLayout = findViewById(R.id.loadingSpinnerConstraintLayout);
 
         sharedPreferencesHelper = SharedPreferencesHelper.getInstance(this);
 
@@ -96,6 +100,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loginButton.setEnabled(false);
+
+                loadingConstraintLayout.setVisibility(View.VISIBLE);
                 String username = String.valueOf(usernameEditText.getText());
                 String email = String.valueOf(emailEditText.getText());
                 String password = String.valueOf(passwordEditText.getText());
@@ -150,6 +156,8 @@ public class LoginActivity extends AppCompatActivity {
                         Log.e("Login", "Login failed: " + t.getMessage());
                         errorTextView.setText("Failed to login. Please try again.");
                         errorTextView.setVisibility(View.VISIBLE);
+                        loadingConstraintLayout.setVisibility(View.GONE);
+
                     }
                 });
             }
@@ -183,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        loadingConstraintLayout.setVisibility(View.VISIBLE);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -215,17 +224,20 @@ public class LoginActivity extends AppCompatActivity {
                         else if (response.code() == 401){
                             errorTextView.setText("401");
                             errorTextView.setVisibility(View.VISIBLE);
+                            loadingConstraintLayout.setVisibility(View.GONE);
 
                         }
 
                         else if (response.code() == 409) {
                             errorTextView.setText("Incorrect username or password");
                             errorTextView.setVisibility(View.VISIBLE);
+                            loadingConstraintLayout.setVisibility(View.GONE);
                         }
 
                         else {
                             errorTextView.setText("Google registration failed. Try again.");
                             errorTextView.setVisibility(View.VISIBLE);
+                            loadingConstraintLayout.setVisibility(View.GONE);
                         }
                     }
 
@@ -234,6 +246,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.e("Login", "Login failed: " + t.getMessage());
                         errorTextView.setText("Failed to login. Please try again.");
                         errorTextView.setVisibility(View.VISIBLE);
+                        loadingConstraintLayout.setVisibility(View.GONE);
                     }
                 });
 
@@ -242,6 +255,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.w("API", "Google sign in failed", e);
                 errorTextView.setText("Google registration failed. Try again.");
                 errorTextView.setVisibility(View.VISIBLE);
+                loadingConstraintLayout.setVisibility(View.GONE);
                 // Handle the error (e.g., by displaying a message to the user)
             }
         }

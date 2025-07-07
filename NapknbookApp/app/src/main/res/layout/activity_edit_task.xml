@@ -16,6 +16,7 @@
         android:text="X"
         android:textColor="@color/white"
         android:textSize="32dp"
+        android:padding="6dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +43,7 @@
         android:text="Done"
         android:textColor="@color/green"
         android:textSize="24dp"
+        android:padding="4dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView16"
@@ -57,10 +59,26 @@
         android:text="❕"
         android:textColor="@color/grey"
         android:textSize="18sp"
+        android:padding="4dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toStartOf="@+id/doneTextView"
         app:layout_constraintTop_toTopOf="@+id/doneTextView"
         app:layout_constraintBottom_toBottomOf="@+id/doneTextView" />
+
+
+    <!-- ✅ Done Button -->
+    <TextView
+        android:id="@+id/deleteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:padding="6dp"
+        android:text="Delete"
+        android:textColor="@color/red"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/categoryTextInputLayout"
@@ -87,7 +105,7 @@
             android:background="@android:color/transparent"
 
             android:inputType="text"
-            android:maxLength="31"
+            android:maxLength="128"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textCursorDrawable="@null" />
@@ -130,7 +148,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:maxLength="31"
 
             android:background="@android:color/transparent"
             android:textColor="@color/white"
@@ -187,6 +204,56 @@
             android:textSize="16sp"
             android:visibility="gone" />
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/confirmTaskDeleteConstraintLayout"
+        android:layout_width="300dp"
+        android:layout_height="125dp"
+        android:background="@drawable/inventory_border"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.411">
+
+
+        <TextView
+            android:id="@+id/textView40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Are you sure you want to delete task?"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/confirmTaskDeleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:text="Confirm"
+            android:textColor="@color/green"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cancelTaskDeleteButton" />
+
+        <Button
+            android:id="@+id/cancelTaskDeleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="Cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
