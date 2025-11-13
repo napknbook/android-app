@@ -143,7 +143,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
-                    .requestIdToken("getString(R.string.google_settings_client_id)")
+                    .requestIdToken(getString(R.string.google_settings_client_id))
                     .build();
 
             GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(SettingsActivity.this, gso);

@@ -2,5 +2,8 @@
     <string name="app_name">Napknbook</string>
     <string name="server_client_id_old">REMOVED_FOR_SECURITY</string>
     <string name="server_client_id">REMOVED_FOR_SECURITY</string>
+    <string name="google_web_client_id">REMOVED_FOR_SECURITY</string>
+    <string name="google_android_client_id">REMOVED_FOR_SECURITY</string>
+    <string name="google_settings_client_id">REMOVED_FOR_SECURITY</string>
 
 </resources>

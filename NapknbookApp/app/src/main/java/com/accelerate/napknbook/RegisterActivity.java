@@ -185,9 +185,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                //.requestIdToken(getString(R.string.server_client_id))
-                .requestIdToken("getString(R.string.google_web_client_id)") // working web client 1 zarar@napknbook.com
-                //.requestIdToken("REMOVED") // working android client release sha 1
+                .requestIdToken(getString(R.string.google_web_client_id))
                 .requestEmail()
                 .build();
 
