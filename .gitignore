@@ -1,0 +1,55 @@
+# Android Studio / IntelliJ IDEA
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.idea/
+
+# Build files
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Keystore files - NEVER COMMIT THESE
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# Local configuration files
+local.properties
+*.local.properties
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+
+# Firebase
+# Note: google-services.json is typically committed, but ensure API keys are restricted
+# If you have separate dev/prod configs, consider using build variants
+
+# Secrets and credentials
+secrets.properties
+credentials.json
+**/secrets/**
+**/credentials/**
+

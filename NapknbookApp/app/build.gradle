@@ -16,7 +16,21 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'key0'
+            // Signing configuration moved to local.properties for security
+            // Create local.properties with:
+            // RELEASE_STORE_FILE=/path/to/your/keystore.jks
+            // RELEASE_KEY_ALIAS=key0
+            // RELEASE_STORE_PASSWORD=your_store_password
+            // RELEASE_KEY_PASSWORD=your_key_password
+            
+            def keystorePropertiesFile = rootProject.file("local.properties")
+            if (keystorePropertiesFile.exists()) {
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                
+                keyAlias keystoreProperties['RELEASE_KEY_ALIAS'] ?: 'key0'
+                storeFile keystoreProperties['RELEASE_STORE_FILE'] ? file(keystoreProperties['RELEASE_STORE_FILE']) : null
+            }
         }
     }
 

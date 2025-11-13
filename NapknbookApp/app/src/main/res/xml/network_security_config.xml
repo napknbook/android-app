@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
+    <!-- Development server configuration removed for security -->
+    <!-- If needed for development, add to local.properties or use build variants -->
+    <!--
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">http://your-dev-server-ip</domain>
     </domain-config>
+    -->
 </network-security-config>
