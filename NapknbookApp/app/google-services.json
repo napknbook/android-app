@@ -1,20 +1,20 @@
 {
   "project_info": {
     "project_number": "REMOVED",
-    "project_id": "napknbook",
+    "project_id": "REMOVED",
     "storage_bucket": "REMOVED"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:REMOVED:android:REMOVED",
+        "mobilesdk_app_id": "REMOVED",
         "android_client_info": {
-          "package_name": "com.aim.napknbook"
+          "package_name": "com.accelerate.napknbook"
         }
       },
       "oauth_client": [
         {
-          "client_id": "REMOVED-REMOVED",
+          "client_id": "REMOVED",
           "client_type": 3
         }
       ],
@@ -27,7 +27,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "REMOVED-REMOVED",
+              "client_id": "REMOVED",
               "client_type": 3
             }
           ]
