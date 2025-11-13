@@ -114,4 +114,16 @@ This repository is for portfolio/educational purposes. The app requires backend 
 
 ## 📄 License
 
-[Add your license here]
+**PROPRIETARY - VIEWING ONLY**
+
+This code is proprietary and confidential. This repository is provided for **viewing purposes only** for portfolio and educational purposes.
+
+**You may NOT:**
+- Use, copy, modify, or distribute this code
+- Use this code for any commercial purpose
+- Create derivative works based on this code
+- Remove or alter any proprietary notices
+
+See [LICENSE](LICENSE) file for full terms.
+
+© All Rights Reserved
