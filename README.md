@@ -114,16 +114,15 @@ This repository is for portfolio/educational purposes. The app requires backend 
 
 ## 📄 License
 
-**PROPRIETARY - VIEWING ONLY**
+**MIT License with Design Protection**
 
-This code is proprietary and confidential. This repository is provided for **viewing purposes only** for portfolio and educational purposes.
+This project uses a modified MIT license that:
+- ✅ **Allows** free use, modification, and distribution of the **code**
+- ✅ **Allows** commercial use of the code
+- ❌ **Protects** the visual design, UI/UX patterns, and design elements
 
-**You may NOT:**
-- Use, copy, modify, or distribute this code
-- Use this code for any commercial purpose
-- Create derivative works based on this code
-- Remove or alter any proprietary notices
+**Code is open** - feel free to use the implementation, logic, and architecture in your projects.
+
+**Design is protected** - the visual design, UI layouts, interaction patterns, and UX concepts are proprietary and may not be copied or recreated.
 
 See [LICENSE](LICENSE) file for full terms.
-
-© All Rights Reserved
